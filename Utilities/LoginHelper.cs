@@ -109,5 +109,21 @@ namespace MarsCompetitionTask3.Utilities
             _wait.Until(d =>
                 d.FindElement(By.XPath("//div[@data-tab='third']//div[text()='Add New' and contains(@class, 'button')]")).Displayed);
         }
+
+        /// <summary>
+        /// After login navigate to to education tab.
+        /// </summary>
+        public void NavigateToCertificationTab()
+        {
+            var tab = _wait.Until(d => d.FindElement(By.CssSelector("a[data-tab='fourth']")));
+            tab.Click();
+            bool status = tab.Displayed;
+            // Wait until Skills tab is active
+            _wait.Until(d => tab.GetAttribute("class")!.Contains("active"));
+
+            // Wait until Add New button in Skills tab is visible
+            _wait.Until(d =>
+                d.FindElement(By.XPath("//div[@data-tab='fourth']//div[text()='Add New' and contains(@class, 'button')]")).Displayed);
+        }
     }
 }

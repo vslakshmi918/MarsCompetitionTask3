@@ -18,13 +18,23 @@ namespace MarsCompetitionTask3.Hooks
         private readonly ScenarioContext _context;
 
         // Track data added during the scenario
-        private static readonly List<EducationModel> _recordsAdded = new();
+        private static readonly List<EducationModel> _educationAdded = new();
+        private static readonly List<CertificationModel> _certificatesAdded = new();
 
         public Hooks(ScenarioContext context) => _context = context;
 
-        public static void AddToCleanupList(EducationModel data)
+        public static void AddToCleanupList(object data)
         {
-            _recordsAdded.Add(data);
+            try
+            {
+                _educationAdded.Add((EducationModel)data);
+            }
+            catch
+            {
+                _certificatesAdded.Add((CertificationModel)data);
+
+            }
+
         }
 
         [BeforeTestRun]
@@ -61,12 +71,12 @@ namespace MarsCompetitionTask3.Hooks
             try
             {
                 // Clean up added records if any exist
-                if (_recordsAdded.Count > 0)
+                if (_educationAdded.Count > 0)
                 {
 
                     var educationPage = new EducationPage(_driver!);
 
-                    foreach (var record in _recordsAdded)
+                    foreach (var record in _educationAdded)
                     {
                         try
                         {
@@ -83,7 +93,32 @@ namespace MarsCompetitionTask3.Hooks
                         }
                     }
 
-                    _recordsAdded.Clear(); // empty list after cleanup
+                    _educationAdded.Clear(); // empty list after cleanup
+                }
+
+                if (_certificatesAdded.Count > 0)
+                {
+
+                    var certificationPage = new CertificationPage(_driver!);
+
+                    foreach (var record in _certificatesAdded)
+                    {
+                        try
+                        {
+                            if (_context.ScenarioInfo.CombinedTags[0] != "Delete" || _context.ScenarioInfo.CombinedTags[0] != "Duplicate" || _context.ScenarioInfo.CombinedTags[0] != "Invalid")
+                            {
+                                certificationPage.DeleteCertification(record);
+
+                            }
+                            _scenario!.Log(Status.Info, $"Cleanup: Deleted record '{record.Certificate} - {record.From}'");
+                        }
+                        catch (Exception ex)
+                        {
+                            _scenario!.Log(Status.Warning, $"Cleanup failed for '{record.Certificate}': {ex.Message}");
+                        }
+                    }
+
+                    _certificatesAdded.Clear(); // empty list after cleanup
                 }
 
                 // Capture screenshot if failed
