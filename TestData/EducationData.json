@@ -1,0 +1,30 @@
+[
+  {
+    "Country": "India",
+    "University": "JNTU Hyderabad",
+    "Title": "B.Tech",
+    "Degree": "Computer Science",
+    "GraduationYear": "2019"
+  },
+  {
+    "Country": "India",
+    "University": "IIIT Hyderabad",
+    "Title": "M.Tech",
+    "Degree": "Data Science",
+    "GraduationYear": "2022"
+  },
+  {
+    "Country": "India",
+    "University": "JNTU Hyderabad",
+    "Title": "B.Tech",
+    "Degree": "Artificial Intelligence",
+    "GraduationYear": "2020"
+  },
+  {
+    "Country": "India",
+    "University": "IIIT Hyderabad",
+    "Title": "M.Tech",
+    "Degree": "Machine Learning",
+    "GraduationYear": "2023"
+  }
+]
